@@ -1,0 +1,4 @@
+name: LuaCraft
+version: '1.0'
+main: org.minetrio1256.luacraft.LuaCraft
+api-version: '1.20'
