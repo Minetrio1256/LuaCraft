@@ -7,7 +7,8 @@ public final class LuaCraft extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-
+        getLogger().info("The LuaCraft plugin has loaded!");
+        getLogger().info("Now starting Lua scripts!");
     }
 
     @Override
