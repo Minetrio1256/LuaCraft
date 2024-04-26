@@ -37,7 +37,8 @@ public final class LuaCraft extends JavaPlugin {
 
         for (File scriptFile : scriptFiles) {
             try {
-                globals.load(new FileReader(scriptFile), scriptFile.getName()).call();
+                LuaValue chunk = globals.load(new FileReader(scriptFile), scriptFile.getName());
+                chunk.call(); // Execute the loaded Lua chunk
             } catch (IOException e) {
                 getLogger().warning("Error loading Lua script: " + scriptFile.getName());
                 e.printStackTrace();
