@@ -1,7 +1,8 @@
 package org.minetrio1256.luacraft;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import org.luaj.vm2.Globals;
 import org.luaj.vm2.LuaValue;
 import org.luaj.vm2.lib.jse.JsePlatform;
@@ -24,7 +25,7 @@ public final class LuaCraft extends JavaPlugin {
     }
 
     private void loadLuaScripts() {
-        File scriptsFolder = new File(getDataFolder(), "LuaCraft");
+        File scriptsFolder = new File(getDataFolder(), "scripts");
         if (!scriptsFolder.exists()) {
             scriptsFolder.mkdirs();
         }
@@ -39,6 +40,12 @@ public final class LuaCraft extends JavaPlugin {
             try {
                 LuaValue chunk = globals.load(new FileReader(scriptFile), scriptFile.getName());
                 chunk.call(); // Execute the loaded Lua chunk
+
+                // Call a Lua function to register commands
+                LuaValue registerCommandFunc = globals.get("registerCommand");
+                if (!registerCommandFunc.isnil() && registerCommandFunc.isfunction()) {
+                    registerCommandFunc.call();
+                }
             } catch (IOException e) {
                 getLogger().warning("Error loading Lua script: " + scriptFile.getName());
                 e.printStackTrace();
