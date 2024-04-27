@@ -20,6 +20,10 @@ public final class LuaCraft extends JavaPlugin {
         // Initialize LuaJ
         globals = JsePlatform.standardGlobals();
 
+        // Expose necessary objects to Lua environment
+        globals.set("plugin", LuaValue.userdataOf(this));
+        globals.set("server", LuaValue.userdataOf(getServer()));
+
         // Load Lua scripts
         loadLuaScripts();
     }
@@ -40,12 +44,6 @@ public final class LuaCraft extends JavaPlugin {
             try {
                 LuaValue chunk = globals.load(new FileReader(scriptFile), scriptFile.getName());
                 chunk.call(); // Execute the loaded Lua chunk
-
-                // Call a Lua function to register commands
-                LuaValue registerCommandFunc = globals.get("registerCommand");
-                if (!registerCommandFunc.isnil() && registerCommandFunc.isfunction()) {
-                    registerCommandFunc.call();
-                }
             } catch (IOException e) {
                 getLogger().warning("Error loading Lua script: " + scriptFile.getName());
                 e.printStackTrace();
